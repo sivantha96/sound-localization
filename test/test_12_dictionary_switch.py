@@ -4,30 +4,29 @@ def rotateClock():
 def rotateAntiClock():
     print("Anti-Clockwise")
 
+def noRotate():
+    print("No Rotation")
+
 # Assignment of numbers to relevant base case
-# 1 - AA
-# 2 - AB
-# 3 - BB
-# 4 - BC
-# 5 - CC
-# 6 - AC
+# 1 - AB
+# 2 - AC
+# 3 - BC
+# 4 - AA
+# 5 - BB
+# 6 - CC
 
-def switch_aa(argument):
+def rotate_system(peak):
     switcher = {
-        1: 
-    }
-
-def rotate_system(argument):
-    switcher = {
-        1: "switch_aa",
-        2: "switch_ab",
-        3: "switch_bb",
-        4: "switch_bc",
-        5: "switch_cc",
-        6: "switch_ac"
+        1: "rotateAntiClock",
+        2: "rotateClock",
+        3: "rotateClock",
+        4: "noRotate",
+        5: "rotateAntiClock",
+        6: "rotateClock"
     }
     # Get the relevant switcher function from the base switcher
-    func = switcher1.get(argument, lambda: "switch_invalid")
+    func = switcher.get(current, lambda: "switch_invalid")
+    func(peak)
 
 if __name__ == "__main__":
     # Current position of the front
@@ -35,4 +34,4 @@ if __name__ == "__main__":
     # Peak direction
     peak = 1
 
-    rotate_system(current)
+    rotate_system(current, peak)
