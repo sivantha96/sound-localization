@@ -7,6 +7,11 @@ def rotateAntiClock():
 def noRotate():
     print("No Rotation")
 
+# Importing trained DNN model
+# from model.dnn_1 import model_1
+# Predicting using the model
+# OUTPUT = model_1.predict(INPUT)
+
 # Assignment of numbers to relevant base case
 # 1 - AB
 # 2 - AC
