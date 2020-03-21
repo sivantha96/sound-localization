@@ -20,7 +20,7 @@ def noRotate():
 # 5 - BB
 # 6 - CC
 
-def rotate_system(peak):
+def rotate_system(current, peak):
     switcher = {
         1: "rotateAntiClock",
         2: "rotateClock",
