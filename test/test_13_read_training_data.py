@@ -1,8 +1,7 @@
-from multiprocessing import Process, Array
 import time
 import pyaudio
 import audioop
-from multiprocessing import Pool, Lock
+from multiprocessing import Pool, Lock, Process, Array
 import pandas as pd
 
 # time delay between each process ~ 0.0003s

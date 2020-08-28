@@ -10,6 +10,11 @@ from sklearn.metrics import r2_score
 
 from matplotlib import pyplot as plt
 
+input_df = pd.read_excel("Output.xlsx", index_col=None, header=None)
+
+x_train = input_df[["mic_1", "mic_2", "mic_3"]].copy()
+y_train = input_df[["direction"]].copy()
+
 model_1 = Sequential()
 model_1.add(Dense(9, input_dim=4, activation='relu'))
 model_1.add(Dense(1, activation='sigmoid'))
@@ -18,7 +23,7 @@ model_1.summary()
 Optimizer = SGD(lr=0.1)
 model_1.compile(optimizer=Optimizer, loss='mean_squared_error')
 
-fitted_model_1 = model_1.fit(tainingX, trainingY, epochs=1000, verbose=1)
+fitted_model_1 = model_1.fit(x_train, y_train, epochs=1000, verbose=1)
 
 history_model_1 = fitted_model_1.history
 loss_model_1 = history_model_1['loss']
