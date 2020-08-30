@@ -94,4 +94,4 @@ if __name__ == "__main__":
         
     d = {'col1': arr_1, 'col2': arr_2, 'col3': arr_3}
     df = pd.DataFrame(data=d)
-    df.to_excel("Output.xlsx")
+    df.to_csv("output.csv")
