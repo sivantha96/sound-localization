@@ -9,10 +9,19 @@ audio = pyaudio.PyAudio()
 # the function to measure and send volumes from a given microphone
 def listen(mic, mic_left, mic_shared, lock):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
+    vol_arr = [0,0,0,0,0]
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
         lock.acquire()
+        vol_arr[0] = vol_arr[1]
+        vol_arr[1] = vol_arr[2]
+        vol_arr[2] = vol_arr[3]
+        vol_arr[3] = vol_arr[4]
+        vol_arr[4] = rms
+        avg = ( vol_arr[1] + vol_arr[2] + vol_arr[3] ) / 3.0
+        if avg > vol_arr[0] and avg > vol_arr[4]:
+            print("peak")
         mic_shared.value = rms
         lock.release()
         # mic_left.send(rms)
