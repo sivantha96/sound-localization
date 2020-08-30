@@ -34,15 +34,17 @@ def stream(mic1_right, mic2_right, mic3_right, mic_A, mic_B, mic_C, lock_A, lock
         array_A.append(mic_A.value)
         array_B.append(mic_B.value)
         array_C.append(mic_C.value)
+        print(str(count) + '=' + str(mic_A.value) + '-' + str(mic_B.value) + '-' + str(mic_C.value))
         lock_B.release()
         lock_C.release()
         lock_A.release()
+        time.sleep(0.1)
         count = count + 1
-        if count == 1000:
+        if count == 5000:
             break
     data = {'col1': array_A, 'col2': array_B, 'col3': array_C}
     df = pd.DataFrame(data=data)
-    df.to_excel("Output.xlsx")
+    df.to_csv("output.csv")
 
 # main function
 if __name__ == "__main__":
@@ -62,18 +64,15 @@ if __name__ == "__main__":
     # define 4 processes to run on each core (note - Pi have only 4 cores)
     p2 = Process(target=listen, args=(1, mic2_left, mic_B, lock_B))
     p1 = Process(target=listen, args=(0, mic1_left, mic_A, lock_A))
-
     p3 = Process(target=listen, args=(2, mic3_left, mic_C, lock_B))
     p4 = Process(target=stream, args=(mic1_right, mic2_right, mic3_right, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
 
     # starting the execution of each process
     p4.start()
-
     p2.start()
     p1.start()
     p3.start()
     p4.join()
-
     p2.join()
     p1.join()
     p3.join()
