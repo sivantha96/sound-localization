@@ -3,10 +3,9 @@ import numpy as np
 import time
 
 # function to get the threshold value from an audio stream
-def get_threshold(stream):
-    stop_threshold_time = time.time() + 60
+def get_threshold(stream, should_stop):
     threshold_array = np.zeros((80,), dtype=int)
-    while True:
+    for i in range(300):
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
         if rms < 10:
@@ -169,7 +168,7 @@ def get_threshold(stream):
             threshold_array[78] = threshold_array[78] + 1
         else:
             threshold_array[79] = threshold_array[79] + 1
-        if stop_threshold_time < time.time():
+        if should_stop.value == 1:
             break
     threshold = (np.argmax(threshold_array) + 3)*10
     return int(threshold)
