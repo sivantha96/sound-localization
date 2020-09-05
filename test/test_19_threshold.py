@@ -13,7 +13,7 @@ audio = pyaudio.PyAudio()
 def listen(mic):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     stop_threshold_time = time.time() + 60
-    threshold_array = np.zeros((30,), dtype=int)
+    threshold_array = np.zeros((40,), dtype=int)
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
@@ -75,8 +75,28 @@ def listen(mic):
             threshold_array[27] = threshold_array[27] + 1
         elif rms < 290:
             threshold_array[28] = threshold_array[28] + 1
-        else:
+        elif rms < 300:
             threshold_array[29] = threshold_array[29] + 1
+        elif rms < 310:
+            threshold_array[30] = threshold_array[30] + 1
+        elif rms < 320:
+            threshold_array[31] = threshold_array[31] + 1
+        elif rms < 330:
+            threshold_array[32] = threshold_array[32] + 1
+        elif rms < 340:
+            threshold_array[33] = threshold_array[33] + 1
+        elif rms < 350:
+            threshold_array[34] = threshold_array[34] + 1
+        elif rms < 360:
+            threshold_array[35] = threshold_array[35] + 1
+        elif rms < 370:
+            threshold_array[36] = threshold_array[36] + 1
+        elif rms < 380:
+            threshold_array[37] = threshold_array[37] + 1
+        elif rms < 390:
+            threshold_array[38] = threshold_array[38] + 1
+        else:
+            threshold_array[39] = threshold_array[39] + 1
         if stop_threshold_time < time.time():
             break
     stream.stop_stream()
