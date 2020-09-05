@@ -3,7 +3,6 @@ import pyaudio
 import sys
 import time
 import audioop
-from os import system
 from threading import Thread
 from pynput.keyboard import Key, Listener
 sys.path.append('/home/pi/Documents/Projects/sound-localization')
@@ -14,7 +13,6 @@ from helper_functions import get_threshold
 def listen(mic, should_stop, shared_mic, lock):
     audio = pyaudio.PyAudio()
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
-    _ = system('clear')
     print('initializing mic ' + str(mic))
     threshold = get_threshold(stream, should_stop)
     print('mic '+ str(mic) +' threshold acquired')
@@ -45,16 +43,14 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     array_A = []
     array_B = []
     array_C = []
-    #print('\x1bc')
     time.sleep(60)
-    print('starting...')
+    print('listening...')
     while True:
-        #print('\x1bc')
-        print('listening...')
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
         if mic_A != 0 or mic_B != 0 or mic_B != 0:
+            print('sound detected..')
             array_A.append(mic_A.value)
             array_B.append(mic_B.value)
             array_C.append(mic_C.value)
@@ -64,10 +60,12 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_B.release()
         lock_C.release()
         lock_A.release()
-        time.sleep(1)
+        time.sleep(0.1)
         if should_stop.value == 1:
             break
     print(array_A)
+    print(array_B)
+    print(array_C)
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
