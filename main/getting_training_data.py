@@ -3,17 +3,20 @@ import time
 import pyaudio
 import audioop
 import pandas as pd
+import numpy as np
 
 audio = pyaudio.PyAudio()
 
 # the function to measure and send volumes from a given microphone
+
+
 def listen(mic, mic_left, mic_shared, lock):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     stop_threshold_time = time.time() + 10
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
-        threshold_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        threshold_array = np.zeros((20,), dtype=int)
         if rms < 10:
             threshold_array[0] = threshold_array[0] + 1
         elif rms < 20:
@@ -56,9 +59,8 @@ def listen(mic, mic_left, mic_shared, lock):
             threshold_array[19] = threshold_array[19] + 1
         if stop_threshold_time < time.time():
             break
-    
-    max_count = max(stop_threshold_time)
-    threshold = stop_threshold_time.index(max_count)
+
+    threshold = (np.argmax(stop_threshold_time) + 1)*10
 
     print('mic' + str(mic) + ' threshold:' + str(threshold))
 
@@ -136,7 +138,8 @@ if __name__ == "__main__":
     p2 = Process(target=listen, args=(1, mic2_left, mic_B, lock_B))
     p1 = Process(target=listen, args=(0, mic1_left, mic_A, lock_A))
     p3 = Process(target=listen, args=(2, mic3_left, mic_C, lock_B))
-    p4 = Process(target=stream, args=(mic1_right, mic2_right, mic3_right, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
+    p4 = Process(target=stream, args=(mic1_right, mic2_right,
+                                      mic3_right, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
 
     # starting the execution of each process
     # p4.start()

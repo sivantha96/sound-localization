@@ -3,17 +3,20 @@ import time
 import pyaudio
 import audioop
 import pandas as pd
+import numpy as np
 
 audio = pyaudio.PyAudio()
 
 # the function to measure and send volumes from a given microphone
+
+
 def listen(mic):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     stop_threshold_time = time.time() + 10
+    threshold_array = np.zeros((20,), dtype=int)
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
-        threshold_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if rms < 10:
             threshold_array[0] = threshold_array[0] + 1
         elif rms < 20:
@@ -59,10 +62,8 @@ def listen(mic):
     stream.stop_stream()
     stream.close()
     audio.terminate()
-    max_count = max(stop_threshold_time)
-    threshold = stop_threshold_time.index(max_count)
+    threshold = (np.argmax(stop_threshold_time) + 1)*10
     print('mic' + str(mic) + ' threshold:' + str(threshold))
-
 
 # main function
 if __name__ == "__main__":
