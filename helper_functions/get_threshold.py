@@ -171,5 +171,5 @@ def get_threshold(stream):
             threshold_array[79] = threshold_array[79] + 1
         if stop_threshold_time < time.time():
             break
-    threshold = (np.argmax(threshold_array) + 2)*10
-    return threshold
+    threshold = (np.argmax(threshold_array) + 3)*10
+    return int(threshold)

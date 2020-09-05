@@ -11,7 +11,7 @@ audio = pyaudio.PyAudio()
 def listen(mic):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     threshold = get_threshold(stream)
-    print('mic' + str(mic) + ' threshold:' + threshold)
+    print('mic' + str(mic) + ' threshold:' + str(threshold))
     stream.stop_stream()
     stream.close()
     audio.terminate()
