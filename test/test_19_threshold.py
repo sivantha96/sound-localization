@@ -13,7 +13,7 @@ audio = pyaudio.PyAudio()
 def listen(mic):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     stop_threshold_time = time.time() + 60
-    threshold_array = np.zeros((40,), dtype=int)
+    threshold_array = np.zeros((80,), dtype=int)
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
@@ -95,14 +95,94 @@ def listen(mic):
             threshold_array[37] = threshold_array[37] + 1
         elif rms < 390:
             threshold_array[38] = threshold_array[38] + 1
-        else:
+        elif rms < 400:
             threshold_array[39] = threshold_array[39] + 1
+        elif rms < 410:
+            threshold_array[40] = threshold_array[40] + 1
+        elif rms < 420:
+            threshold_array[41] = threshold_array[41] + 1
+        elif rms < 430:
+            threshold_array[42] = threshold_array[42] + 1
+        elif rms < 440:
+            threshold_array[43] = threshold_array[43] + 1
+        elif rms < 450:
+            threshold_array[44] = threshold_array[44] + 1
+        elif rms < 460:
+            threshold_array[45] = threshold_array[45] + 1
+        elif rms < 470:
+            threshold_array[46] = threshold_array[46] + 1
+        elif rms < 480:
+            threshold_array[47] = threshold_array[47] + 1
+        elif rms < 490:
+            threshold_array[48] = threshold_array[48] + 1
+        elif rms < 500:
+            threshold_array[49] = threshold_array[49] + 1
+        elif rms < 510:
+            threshold_array[50] = threshold_array[50] + 1
+        elif rms < 520:
+            threshold_array[51] = threshold_array[51] + 1
+        elif rms < 530:
+            threshold_array[52] = threshold_array[52] + 1
+        elif rms < 540:
+            threshold_array[53] = threshold_array[53] + 1
+        elif rms < 550:
+            threshold_array[54] = threshold_array[54] + 1
+        elif rms < 560:
+            threshold_array[55] = threshold_array[55] + 1
+        elif rms < 570:
+            threshold_array[56] = threshold_array[56] + 1
+        elif rms < 580:
+            threshold_array[57] = threshold_array[57] + 1
+        elif rms < 590:
+            threshold_array[58] = threshold_array[58] + 1
+        elif rms < 600:
+            threshold_array[59] = threshold_array[59] + 1
+        elif rms < 610:
+            threshold_array[60] = threshold_array[60] + 1
+        elif rms < 620:
+            threshold_array[61] = threshold_array[61] + 1
+        elif rms < 630:
+            threshold_array[62] = threshold_array[62] + 1
+        elif rms < 640:
+            threshold_array[63] = threshold_array[63] + 1
+        elif rms < 650:
+            threshold_array[64] = threshold_array[64] + 1
+        elif rms < 660:
+            threshold_array[65] = threshold_array[65] + 1
+        elif rms < 670:
+            threshold_array[66] = threshold_array[66] + 1
+        elif rms < 680:
+            threshold_array[67] = threshold_array[67] + 1
+        elif rms < 690:
+            threshold_array[68] = threshold_array[68] + 1
+        elif rms < 700:
+            threshold_array[69] = threshold_array[69] + 1
+        elif rms < 710:
+            threshold_array[70] = threshold_array[70] + 1
+        elif rms < 720:
+            threshold_array[71] = threshold_array[71] + 1
+        elif rms < 730:
+            threshold_array[72] = threshold_array[72] + 1
+        elif rms < 740:
+            threshold_array[73] = threshold_array[73] + 1
+        elif rms < 750:
+            threshold_array[74] = threshold_array[74] + 1
+        elif rms < 760:
+            threshold_array[75] = threshold_array[75] + 1
+        elif rms < 770:
+            threshold_array[76] = threshold_array[76] + 1
+        elif rms < 780:
+            threshold_array[77] = threshold_array[77] + 1
+        elif rms < 790:
+            threshold_array[78] = threshold_array[78] + 1
+        else:
+            threshold_array[79] = threshold_array[79] + 1
         if stop_threshold_time < time.time():
             break
     stream.stop_stream()
     stream.close()
     audio.terminate()
-    threshold = (np.argmax(threshold_array) + 1)*10
+    threshold = (np.argmax(threshold_array) + 2)*10
     print('mic' + str(mic) + ' threshold:' + str(threshold))
     print(threshold_array)
 
