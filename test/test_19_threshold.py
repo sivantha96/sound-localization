@@ -12,8 +12,8 @@ audio = pyaudio.PyAudio()
 
 def listen(mic):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
-    stop_threshold_time = time.time() + 10
-    threshold_array = np.zeros((20,), dtype=int)
+    stop_threshold_time = time.time() + 60
+    threshold_array = np.zeros((30,), dtype=int)
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
@@ -55,21 +55,42 @@ def listen(mic):
             threshold_array[17] = threshold_array[17] + 1
         elif rms < 190:
             threshold_array[18] = threshold_array[18] + 1
-        else:
+        elif rms < 200:
             threshold_array[19] = threshold_array[19] + 1
+        elif rms < 210:
+            threshold_array[20] = threshold_array[20] + 1
+        elif rms < 220:
+            threshold_array[21] = threshold_array[21] + 1
+        elif rms < 230:
+            threshold_array[22] = threshold_array[22] + 1
+        elif rms < 240:
+            threshold_array[23] = threshold_array[23] + 1
+        elif rms < 250:
+            threshold_array[24] = threshold_array[24] + 1
+        elif rms < 260:
+            threshold_array[25] = threshold_array[25] + 1
+        elif rms < 270:
+            threshold_array[26] = threshold_array[26] + 1
+        elif rms < 280:
+            threshold_array[27] = threshold_array[27] + 1
+        elif rms < 290:
+            threshold_array[28] = threshold_array[28] + 1
+        else:
+            threshold_array[29] = threshold_array[29] + 1
         if stop_threshold_time < time.time():
             break
     stream.stop_stream()
     stream.close()
     audio.terminate()
-    threshold = (np.argmax(stop_threshold_time) + 1)*10
+    threshold = (np.argmax(threshold_array) + 1)*10
     print('mic' + str(mic) + ' threshold:' + str(threshold))
+    print(threshold_array)
 
 # main function
 if __name__ == "__main__":
-    p1 = Process(target=listen, args=(0))
-    p2 = Process(target=listen, args=(1))
-    p3 = Process(target=listen, args=(2))
+    p1 = Process(target=listen, args=(0,))
+    p2 = Process(target=listen, args=(1,))
+    p3 = Process(target=listen, args=(2,))
     p1.start()
     p2.start()
     p3.start()
