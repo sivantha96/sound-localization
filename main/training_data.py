@@ -59,6 +59,14 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             break
     print('\nprocess '+ str(num) + ' stopped')
 
+def keyboard_listen(num, should_stop, listener):
+    try:
+        listener.start()
+        listener.join()
+    finally:
+        listener.stop()
+    print('\nprocess '+ str(num) + ' stopped')
+
 # main function
 if __name__ == "__main__":
     global should_stop
@@ -79,19 +87,16 @@ if __name__ == "__main__":
     p2 = Process(target=listen, args=(1, should_stop, mic_B, lock_B))
     p3 = Process(target=listen, args=(2, should_stop, mic_C, lock_C))
     p4 = Process(target=localize, args=(3, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
+    p4 = Process(target=keyboard_listen, args=(4, should_stop, listener))
 
     p1.start()
     p2.start()
     p3.start()
     p4.start()
+    p5.start()
 
     p1.join()
     p2.join()
     p3.join()
     p4.join()
-    
-    try:
-        listener.start()
-        listener.join()
-    finally:
-        listener.stop()
+    p5.join()
