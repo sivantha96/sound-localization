@@ -56,9 +56,6 @@ def listen(mic, mic_left, mic_shared, lock):
             threshold_array[19] = threshold_array[19] + 1
         if stop_threshold_time < time.time():
             break
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
     
     max_count = max(stop_threshold_time)
     threshold = stop_threshold_time.index(max_count)
