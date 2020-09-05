@@ -3,6 +3,7 @@ import pyaudio
 import sys
 import time
 import audioop
+import pandas as pd
 from threading import Thread
 from pynput.keyboard import Key, Listener
 sys.path.append('/home/pi/Documents/Projects/sound-localization')
@@ -25,7 +26,6 @@ def listen(mic, should_stop, shared_mic, lock):
             lock.release()
         if should_stop.value == 1:
             break
-        time.sleep(1)
     stream.stop_stream()
     stream.close()
     audio.terminate()
@@ -49,7 +49,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A != 0 or mic_B != 0 or mic_B != 0:
+        if mic_A.value != 0 and mic_B.value != 0 and mic_B.value != 0:
             print('sound detected..')
             array_A.append(mic_A.value)
             array_B.append(mic_B.value)
@@ -63,9 +63,9 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         time.sleep(0.1)
         if should_stop.value == 1:
             break
-    print(array_A)
-    print(array_B)
-    print(array_C)
+    data = {'col1': array_A, 'col2': array_B, 'col3': array_C}
+    df = pd.DataFrame(data=data)
+    df.to_csv("output.csv")
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
@@ -100,6 +100,10 @@ if __name__ == "__main__":
     mic_A = Value('d')
     mic_B = Value('d')
     mic_C = Value('d')
+    
+    mic_A.value = 0
+    mic_B.value = 0
+    mic_B.value = 0
 
     lock_A = Lock()
     lock_B = Lock()
