@@ -1,16 +1,15 @@
+import helper_functions
 import pandas as pd
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
+import sys
+sys.path.append('C:/Users/Sivantha_112068/Documents/Projects/sound-localization')
 
 # import helper functions
-from helper_functions import save_model
-from helper_functions import plot_history
-from helper_functions import predict_category
-from helper_functions import test_model
-from helper_functions import get_encoder
+from helper_functions import save_model, plot_history, predict_category, test_model, get_encoder
 
 # set the categories
 categories = pd.DataFrame(['Iris-virginica', 'Iris-setosa', 'Iris-versicolor'])
@@ -55,7 +54,7 @@ hist = model.fit(X_train, Y_train, epochs=1000, verbose=0)
 # test_model(Y_test, X_test, model)
 
 # print the prediction
-print(predict_category(model, encoder, 5.6,3,4.5))
+print(predict_category(model, encoder, 5.6, 3, 4.5))
 
 # plot the loss of the training proccess
 # plot_history(hist)

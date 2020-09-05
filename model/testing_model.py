@@ -1,9 +1,12 @@
+from helper_functions import predict_category
+from helper_functions import get_encoder
 import pandas as pd
 from keras.models import model_from_json
+import sys
+# sys.path.append('C:/Users/Sivantha_112068/Documents/Projects/sound-localization')
+sys.path.append('/home/pi/Documents/Projects/sound-localization')
 
 # import helper functions
-from helper_functions import get_encoder
-from helper_functions import predict_category
 
 # set the categories
 categories = pd.DataFrame(['Iris-virginica', 'Iris-setosa', 'Iris-versicolor'])
