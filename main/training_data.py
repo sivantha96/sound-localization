@@ -3,6 +3,7 @@ import pyaudio
 import sys
 import time
 import audioop
+from threading import Thread
 from pynput.keyboard import Key, Listener
 sys.path.append('/home/pi/Documents/Projects/sound-localization')
 
@@ -41,6 +42,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     array_B = []
     array_C = []
     while True:
+        print('.')
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
@@ -57,7 +59,8 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         time.sleep(1)
         if should_stop == 1:
             break
-    print('\nprocess '+ str(num) + ' stopped')
+    print(array_A)
+    print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
     try:
@@ -65,6 +68,11 @@ def keyboard_listen(num, should_stop, listener):
         listener.join()
     finally:
         listener.stop()
+    print('\nthread '+ str(num) + ' stopped')
+
+def main_process(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C):
+    t1 = Thread(target=localize, args=(1, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
+    t2 = Thread(target=keyboard_listen, args=(2, should_stop, listener))
     print('\nprocess '+ str(num) + ' stopped')
 
 # main function
@@ -87,16 +95,13 @@ if __name__ == "__main__":
     p2 = Process(target=listen, args=(1, should_stop, mic_B, lock_B))
     p3 = Process(target=listen, args=(2, should_stop, mic_C, lock_C))
     p4 = Process(target=localize, args=(3, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
-    p4 = Process(target=keyboard_listen, args=(4, should_stop, listener))
 
     p1.start()
     p2.start()
     p3.start()
     p4.start()
-    p5.start()
 
     p1.join()
     p2.join()
     p3.join()
     p4.join()
-    p5.join()
