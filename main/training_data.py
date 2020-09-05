@@ -3,6 +3,7 @@ import pyaudio
 import sys
 import time
 import audioop
+from os import system
 from threading import Thread
 from pynput.keyboard import Key, Listener
 sys.path.append('/home/pi/Documents/Projects/sound-localization')
@@ -13,10 +14,9 @@ from helper_functions import get_threshold
 def listen(mic, should_stop, shared_mic, lock):
     audio = pyaudio.PyAudio()
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
-    #print('\x1bc')
+    _ = system('clear')
     print('initializing mic ' + str(mic))
     threshold = get_threshold(stream, should_stop)
-    #print('\x1bc')
     print('mic '+ str(mic) +' threshold acquired')
     while True:
         data = stream.read(4096, exception_on_overflow=False)
@@ -46,8 +46,8 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     array_B = []
     array_C = []
     #print('\x1bc')
+    time.sleep(60)
     print('starting...')
-    time.sleep(10)
     while True:
         #print('\x1bc')
         print('listening...')
@@ -65,14 +65,15 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_C.release()
         lock_A.release()
         time.sleep(1)
-        if should_stop == 1:
+        if should_stop.value == 1:
             break
     print(array_A)
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
+    time.sleep(10)
+    print('listening to keyboard...')
     try:
-        print('listening to keyboard...')
         listener.start()
         listener.join()
     finally:
@@ -82,6 +83,12 @@ def keyboard_listen(num, should_stop, listener):
 def main_process(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C):
     t1 = Thread(target=localize, args=(1, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
     t2 = Thread(target=keyboard_listen, args=(2, should_stop, listener))
+    t2.start()
+    t1.start()
+    
+    t2.join()
+    t1.join()
+    
     print('\nprocess '+ str(num) + ' stopped')
 
 # main function
@@ -103,7 +110,7 @@ if __name__ == "__main__":
     p1 = Process(target=listen, args=(0, should_stop, mic_A, lock_A))
     p2 = Process(target=listen, args=(1, should_stop, mic_B, lock_B))
     p3 = Process(target=listen, args=(2, should_stop, mic_C, lock_C))
-    p4 = Process(target=localize, args=(3, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
+    p4 = Process(target=main_process, args=(3, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
 
     p1.start()
     p2.start()
