@@ -10,7 +10,13 @@ audio = pyaudio.PyAudio()
 def listen(mic, mic_left, mic_shared, lock):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     vol_arr = [0,0,0,0,0]
+    if mic == 0:
+        threshold = 115
+    else:
+        threshold = 35
+    mic_left.send(0)
     while True:
+        print("listening on " + str(mic))
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
         lock.acquire()
@@ -19,9 +25,9 @@ def listen(mic, mic_left, mic_shared, lock):
         vol_arr[2] = vol_arr[3]
         vol_arr[3] = vol_arr[4]
         vol_arr[4] = rms
-        avg = ( vol_arr[1] + vol_arr[2] + vol_arr[3] ) / 3.0
-        if avg > vol_arr[0] and avg > vol_arr[4]:
-            print("peak")
+        avg = ( vol_arr[1] + vol_arr[2] + vol_arr[3]) / 3.0
+        if avg > vol_arr[0] and avg > vol_arr[4] and avg > threshold:
+            mic_left.send(time.time())
         mic_shared.value = rms
         lock.release()
         # mic_left.send(rms)
@@ -33,10 +39,15 @@ def stream(mic1_right, mic2_right, mic3_right, mic_A, mic_B, mic_C, lock_A, lock
     array_B = []
     array_C = []
     count = 0
+    time_A = 0
+    time_B = 0
+    time_C = 0
     while True:
-        # val1 = mic1_right.recv()
-        # val2 = mic2_right.recv()
-        # val3 = mic3_right.recv()
+        if time_A != mic1_right.recv() and time_B != mic2_right.recv() and time_C != mic3_right.recv():
+            time_A = mic1_right.recv()
+            time_B = mic2_right.recv()
+            time_C = mic3_right.recv()
+            print("peak " + '=' + str(time_A) + '-' + str(time_B) + '-' + str(time_C))
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
