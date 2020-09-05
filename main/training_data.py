@@ -13,10 +13,10 @@ from helper_functions import get_threshold
 def listen(mic, should_stop, shared_mic, lock):
     audio = pyaudio.PyAudio()
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
-    print('\x1bc')
+    #print('\x1bc')
     print('initializing mic ' + str(mic))
     threshold = get_threshold(stream, should_stop)
-    print('\x1bc')
+    #print('\x1bc')
     print('mic '+ str(mic) +' threshold acquired')
     while True:
         data = stream.read(4096, exception_on_overflow=False)
@@ -45,11 +45,11 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     array_A = []
     array_B = []
     array_C = []
-    print('\x1bc')
+    #print('\x1bc')
     print('starting...')
     time.sleep(10)
     while True:
-        print('\x1bc')
+        #print('\x1bc')
         print('listening...')
         lock_A.acquire()
         lock_B.acquire()
@@ -72,6 +72,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
 
 def keyboard_listen(num, should_stop, listener):
     try:
+        print('listening to keyboard...')
         listener.start()
         listener.join()
     finally:
