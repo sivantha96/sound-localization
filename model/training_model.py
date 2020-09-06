@@ -1,4 +1,3 @@
-import helper_functions
 import pandas as pd
 import numpy as np
 from keras.models import Sequential
@@ -12,7 +11,7 @@ sys.path.append('C:/Users/Sivantha_112068/Documents/Projects/sound-localization'
 from helper_functions import save_model, plot_history, predict_category, test_model, get_encoder
 
 # set the categories
-categories = pd.DataFrame(['Iris-virginica', 'Iris-setosa', 'Iris-versicolor'])
+categories = pd.DataFrame(['AC', 'AB', 'BC'])
 
 # load dataset
 df = pd.read_csv('C:/sound.csv')
@@ -54,10 +53,10 @@ hist = model.fit(X_train, Y_train, epochs=1000, verbose=0)
 # test_model(Y_test, X_test, model)
 
 # print the prediction
-print(predict_category(model, encoder, 5.6, 3, 4.5))
+# print(predict_category(model, encoder, 5.6, 3, 4.5))
 
 # plot the loss of the training proccess
 # plot_history(hist)
 
 # save the model and weights
-# save_model(model)
+save_model(model)
