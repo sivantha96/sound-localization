@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 
 
-def predict_category(model, encoder, val_A, val_B, val_C):
+def predict_category(model, encoder, val_A, val_B, val_C, val_S):
     # define a dataframe from values
-    df = pd.DataFrame([val_A, val_B, val_C])
+    df = pd.DataFrame([val_A, val_B, val_C, val_S])
     # transpose it to get the shape (4,1)
     df = df.transpose()
     # prediction - returns an array of predictions (but here, it contains only one element)
