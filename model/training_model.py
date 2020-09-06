@@ -23,11 +23,11 @@ encoder = get_encoder(categories)
 df_train, df_test = train_test_split(df, test_size=0.2)
 
 # training data input-X output-Y
-X_train = df_train[["A", "B", "C", "S"]].copy()
+X_train = df_train[["A", "B", "C"]].copy()
 Y_train = df_train[["DIRECTION"]].copy()
 
 # testing data input-X output-Y
-X_test = df_test[["A", "B", "C", "S"]].copy()
+X_test = df_test[["A", "B", "C"]].copy()
 Y_test = df_test[["DIRECTION"]].copy()
 
 # coverting training output to one-hot representation
