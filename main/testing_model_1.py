@@ -67,20 +67,12 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         timer = timer - 1
         if timer == 0:
             break
-    old_side = 1
     while True:
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
         if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
-            new_side = predict_category(model, encoder, mic_A.value, mic_B.value, mic_C.value, old_side)
-            if new_side == 'AB':
-                old_side = 1
-            elif new_side == 'AC':
-                old_side = 2
-            else:
-                old_side = 3
-            print(new_side)
+            print(predict_category(model, encoder, mic_A.value, mic_B.value, mic_C.value))
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0

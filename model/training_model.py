@@ -40,7 +40,7 @@ Y_test = np_utils.to_categorical(encoded_Y_test)
 
 # defining the deep learning model model
 model = Sequential()
-model.add(Dense(8, input_dim=4, activation='relu'))
+model.add(Dense(8, input_dim=3, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 
 # compile the model
