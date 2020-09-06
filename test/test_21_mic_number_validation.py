@@ -15,15 +15,10 @@ def listen(mic, should_stop, shared_mic, lock):
     audio = pyaudio.PyAudio()
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     print('initializing mic ' + str(mic))
-    threshold = get_threshold(stream, should_stop)
-    print('mic '+ str(mic) +' threshold acquired')
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
-        if rms > threshold:
-            lock.acquire()
-            shared_mic.value = rms
-            lock.release()
+        print(rms)
         if should_stop.value == 1:
             break
     stream.stop_stream()
@@ -151,7 +146,6 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
-    time.sleep(10)
     print('listening to keyboard...')
     try:
         listener.start()
@@ -164,10 +158,10 @@ def main_process(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B
     t1 = Thread(target=localize, args=(1, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
     t2 = Thread(target=keyboard_listen, args=(2, should_stop, listener))
     t2.start()
-    t1.start()
+    #t1.start()
     
     t2.join()
-    t1.join()
+    #t1.join()
     
     print('\nprocess '+ str(num) + ' stopped')
 
@@ -197,11 +191,12 @@ if __name__ == "__main__":
     p4 = Process(target=main_process, args=(3, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C))
 
     p1.start()
-    p2.start()
-    p3.start()
+    #p2.start()
+    #p3.start()
     p4.start()
 
     p1.join()
-    p2.join()
-    p3.join()
+    #p2.join()
+    #p3.join()
     p4.join()
+
