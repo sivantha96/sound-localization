@@ -2,5 +2,5 @@ from helper_functions.predict_category import predict_category
 from helper_functions.plot_history import plot_history
 from helper_functions.test_model import test_model
 from helper_functions.save_model import save_model
-from helper_functions.get_encode import get_encoder
+from helper_functions.get_encoder import get_encoder
 from helper_functions.get_threshold import get_threshold

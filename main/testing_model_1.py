@@ -5,10 +5,10 @@ import time
 import audioop
 import pandas as pd
 from threading import Thread
+from keras.models import model_from_json
 from pynput.keyboard import Key, Listener
 sys.path.append('/home/pi/Documents/Projects/sound-localization')
-
-from helper_functions import get_threshold
+from helper_functions import get_threshold, get_encoder, predict_category
 
 # the function to measure and send volumes from a given microphone
 def listen(mic, should_stop, shared_mic, lock):
@@ -40,14 +40,29 @@ def on_release(key):
         listener.stop()
         
 def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lock_C):
-    time.sleep(60)
-    count = 0
-    array_A = []
-    array_B = []
-    array_C = []
+    # set the categories
+    categories = pd.DataFrame(['AB', 'AC', 'BC'])
+
+    # get the encoder
+    encoder = get_encoder(categories)
+
+    # open model.json
+    json_file = open('/home/pi/Documents/Projects/sound-localization/model.json', 'r')
+    model_json = json_file.read()
+    json_file.close()
+
+    # load model
+    model = model_from_json(model_json)
+    model.load_weights("/home/pi/Documents/Projects/sound-localization/model.h5")
+
+    # compile the model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    print("Model is ready")
+
     timer = 20
     while True:
-        print('listening on AB side in '+ str(timer) +' seconds ...')
+        print('starting to listen  in '+ str(timer) +' seconds ...')
         time.sleep(1)
         timer = timer - 1
         if timer == 0:
@@ -56,12 +71,9 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
-            count = count + 1
+        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
             print('sound detected..')
-            array_A.append(mic_A.value)
-            array_B.append(mic_B.value)
-            array_C.append(mic_C.value)
+            print(predict_category(model, encoder, mic_A.value, mic_B.value, mic_C.value))
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
@@ -69,85 +81,8 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_C.release()
         lock_A.release()
         time.sleep(0.1)
-        if count == 100:
-            break
         if should_stop.value == 1:
             break
-    data = {'A': array_A, 'B': array_B, 'C': array_C}
-    df = pd.DataFrame(data=data)
-    df.to_csv("AB_output.csv")
-    
-    count = 0
-    array_A = []
-    array_B = []
-    array_C = []
-    timer = 20
-    while True:
-        print('listening on AC side in '+ str(timer) +' seconds ...')
-        time.sleep(1)
-        timer = timer - 1
-        if timer == 0:
-            break
-    while True:
-        lock_A.acquire()
-        lock_B.acquire()
-        lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
-            count = count + 1
-            print('sound detected..')
-            array_A.append(mic_A.value)
-            array_B.append(mic_B.value)
-            array_C.append(mic_C.value)
-            mic_A.value = 0
-            mic_B.value = 0
-            mic_C.value = 0
-        lock_B.release()
-        lock_C.release()
-        lock_A.release()
-        time.sleep(0.1)
-        if count == 100:
-            break
-        if should_stop.value == 1:
-            break
-    data = {'A': array_A, 'B': array_B, 'C': array_C}
-    df = pd.DataFrame(data=data)
-    df.to_csv("AC_output.csv")
-    
-    count = 0
-    array_A = []
-    array_B = []
-    array_C = []
-    timer = 20
-    while True:
-        print('listening on BC side in '+ str(timer) +' seconds ...')
-        time.sleep(1)
-        timer = timer - 1
-        if timer == 0:
-            break
-    while True:
-        lock_A.acquire()
-        lock_B.acquire()
-        lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
-            count = count + 1
-            print('sound detected..')
-            array_A.append(mic_A.value)
-            array_B.append(mic_B.value)
-            array_C.append(mic_C.value)
-            mic_A.value = 0
-            mic_B.value = 0
-            mic_C.value = 0
-        lock_B.release()
-        lock_C.release()
-        lock_A.release()
-        time.sleep(0.1)
-        if count == 100:
-            break
-        if should_stop.value == 1:
-            break
-    data = {'A': array_A, 'B': array_B, 'C': array_C}
-    df = pd.DataFrame(data=data)
-    df.to_csv("BC_output.csv")
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
