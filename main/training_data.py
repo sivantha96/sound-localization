@@ -56,7 +56,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
+        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
             count = count + 1
             print('sound detected..')
             array_A.append(mic_A.value)
@@ -65,17 +65,18 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
+            time.sleep(0.6)
         lock_B.release()
         lock_C.release()
         lock_A.release()
         time.sleep(0.1)
-        if count == 100:
+        if count == 200:
             break
         if should_stop.value == 1:
             break
     data = {'A': array_A, 'B': array_B, 'C': array_C}
     df = pd.DataFrame(data=data)
-    df.to_csv("AB_output.csv")
+    df.to_csv("ABoutput.csv")
     
     count = 0
     array_A = []
@@ -92,7 +93,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
+        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
             count = count + 1
             print('sound detected..')
             array_A.append(mic_A.value)
@@ -101,17 +102,18 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
+            time.sleep(0.6)
         lock_B.release()
         lock_C.release()
         lock_A.release()
         time.sleep(0.1)
-        if count == 100:
+        if count == 200:
             break
         if should_stop.value == 1:
             break
     data = {'A': array_A, 'B': array_B, 'C': array_C}
     df = pd.DataFrame(data=data)
-    df.to_csv("AC_output.csv")
+    df.to_csv("ACoutput.csv")
     
     count = 0
     array_A = []
@@ -128,7 +130,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value:
+        if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
             count = count + 1
             print('sound detected..')
             array_A.append(mic_A.value)
@@ -137,17 +139,18 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
+            time.sleep(0.6)
         lock_B.release()
         lock_C.release()
         lock_A.release()
         time.sleep(0.1)
-        if count == 100:
+        if count == 200:
             break
         if should_stop.value == 1:
             break
     data = {'A': array_A, 'B': array_B, 'C': array_C}
     df = pd.DataFrame(data=data)
-    df.to_csv("BC_output.csv")
+    df.to_csv("BCoutput.csv")
     print('\nthread '+ str(num) + ' stopped')
 
 def keyboard_listen(num, should_stop, listener):
