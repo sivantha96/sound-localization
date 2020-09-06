@@ -92,7 +92,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_A.value != 0 and mic_B.value != 0:
+        if mic_A.value != 0 and mic_C.value != 0:
             count = count + 1
             print('sound detected..')
             array_A.append(mic_A.value)
@@ -128,7 +128,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_A.acquire()
         lock_B.acquire()
         lock_C.acquire()
-        if mic_B.value != 0 and mic_B.value != 0:
+        if mic_B.value != 0 and mic_C.value != 0:
             count = count + 1
             print('sound detected..')
             array_A.append(mic_A.value)
