@@ -59,7 +59,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     print("Model is ready")
-
+    time.sleep(20)
     timer = 20
     while True:
         print('starting to listen  in '+ str(timer) +' seconds ...')
@@ -72,11 +72,11 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
         lock_B.acquire()
         lock_C.acquire()
         if mic_A.value != 0 or mic_B.value != 0 or mic_C.value != 0:
-            print('sound detected..')
             print(predict_category(model, encoder, mic_A.value, mic_B.value, mic_C.value))
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
+            time.sleep(0.5)
         lock_B.release()
         lock_C.release()
         lock_A.release()
