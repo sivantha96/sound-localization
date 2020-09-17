@@ -16,11 +16,14 @@ def listen(mic, should_stop, shared_mic, lock):
     stream = audio.open(format=pyaudio.paInt16, rate=44100, channels=1, input_device_index=mic, input=True, frames_per_buffer=4096)
     print('initializing mic ' + str(mic))
     threshold = get_threshold(stream, should_stop)
+    if threshold > 600:
+        threshold = threshold + 30
     print('mic '+ str(mic) +' threshold acquired')
     while True:
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
         if rms > threshold:
+            print('mic' + str(mic) + ' - ' + str(rms))
             lock.acquire()
             shared_mic.value = rms
             lock.release()
