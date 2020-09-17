@@ -47,16 +47,16 @@ model.add(Dense(3, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # fit the model and save the history
-hist = model.fit(X_train, Y_train, epochs=1000, verbose=0)
+hist = model.fit(X_train, Y_train, epochs=3000, verbose=0)
 
 # test the performance of the model
-# test_model(Y_test, X_test, model)
+test_model(Y_test, X_test, model)
 
 # print the prediction
 # print(predict_category(model, encoder, 5.6, 3, 4.5))
 
 # plot the loss of the training proccess
-# plot_history(hist)
+plot_history(hist)
 
 # save the model and weights
 save_model(model)
