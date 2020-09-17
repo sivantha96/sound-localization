@@ -4,7 +4,7 @@ import time
 
 # function to get the threshold value from an audio stream
 def get_threshold(stream, should_stop):
-    threshold_array = np.zeros((80,), dtype=int)
+    threshold_array = np.zeros((120,), dtype=int)
     for i in range(300):
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
@@ -166,8 +166,88 @@ def get_threshold(stream, should_stop):
             threshold_array[77] = threshold_array[77] + 1
         elif rms < 790:
             threshold_array[78] = threshold_array[78] + 1
-        else:
+        elif rms < 800:
             threshold_array[79] = threshold_array[79] + 1
+        elif rms < 810:
+            threshold_array[80] = threshold_array[80] + 1
+        elif rms < 820:
+            threshold_array[81] = threshold_array[81] + 1
+        elif rms < 830:
+            threshold_array[82] = threshold_array[82] + 1
+        elif rms < 840:
+            threshold_array[83] = threshold_array[83] + 1
+        elif rms < 850:
+            threshold_array[84] = threshold_array[84] + 1
+        elif rms < 860:
+            threshold_array[85] = threshold_array[85] + 1
+        elif rms < 870:
+            threshold_array[86] = threshold_array[86] + 1
+        elif rms < 880:
+            threshold_array[87] = threshold_array[87] + 1
+        elif rms < 890:
+            threshold_array[88] = threshold_array[88] + 1
+        elif rms < 900:
+            threshold_array[89] = threshold_array[89] + 1
+        elif rms < 910:
+            threshold_array[90] = threshold_array[90] + 1
+        elif rms < 920:
+            threshold_array[91] = threshold_array[91] + 1
+        elif rms < 930:
+            threshold_array[92] = threshold_array[92] + 1
+        elif rms < 940:
+            threshold_array[93] = threshold_array[93] + 1
+        elif rms < 950:
+            threshold_array[94] = threshold_array[94] + 1
+        elif rms < 960:
+            threshold_array[95] = threshold_array[95] + 1
+        elif rms < 970:
+            threshold_array[96] = threshold_array[96] + 1
+        elif rms < 980:
+            threshold_array[97] = threshold_array[97] + 1    
+        elif rms < 990:
+            threshold_array[98] = threshold_array[98] + 1
+        elif rms < 1000:
+            threshold_array[99] = threshold_array[99] + 1
+        elif rms < 1010:
+            threshold_array[100] = threshold_array[100] + 1
+        elif rms < 1020:
+            threshold_array[101] = threshold_array[101] + 1
+        elif rms < 1030:
+            threshold_array[102] = threshold_array[102] + 1
+        elif rms < 1040:
+            threshold_array[103] = threshold_array[103] + 1
+        elif rms < 1050:
+            threshold_array[104] = threshold_array[104] + 1
+        elif rms < 1060:
+            threshold_array[105] = threshold_array[105] + 1
+        elif rms < 1070:
+            threshold_array[106] = threshold_array[106] + 1
+        elif rms < 1080:
+            threshold_array[107] = threshold_array[107] + 1
+        elif rms < 1090:
+            threshold_array[108] = threshold_array[108] + 1
+        elif rms < 1100:
+            threshold_array[109] = threshold_array[109] + 1
+        elif rms < 1110:
+            threshold_array[110] = threshold_array[110] + 1
+        elif rms < 1120:
+            threshold_array[111] = threshold_array[111] + 1
+        elif rms < 1130:
+            threshold_array[112] = threshold_array[112] + 1
+        elif rms < 1140:
+            threshold_array[113] = threshold_array[113] + 1
+        elif rms < 1150:
+            threshold_array[114] = threshold_array[114] + 1
+        elif rms < 1160:
+            threshold_array[115] = threshold_array[115] + 1
+        elif rms < 1170:
+            threshold_array[116] = threshold_array[116] + 1
+        elif rms < 1180:
+            threshold_array[117] = threshold_array[117] + 1
+        elif rms < 1190:
+            threshold_array[118] = threshold_array[118] + 1
+        else:
+            threshold_array[119] = threshold_array[119] + 1
         if should_stop.value == 1:
             break
     threshold = (np.argmax(threshold_array) + 3)*10
