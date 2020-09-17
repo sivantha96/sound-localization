@@ -23,7 +23,6 @@ def listen(mic, should_stop, shared_mic, lock):
         data = stream.read(4096, exception_on_overflow=False)
         rms = audioop.rms(data, 2)
         if rms > threshold:
-            print('mic' + str(mic) + ' - ' + str(rms))
             lock.acquire()
             shared_mic.value = rms
             lock.release()
@@ -79,11 +78,11 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
-            time.sleep(0.5)
+            time.sleep(0.1)
         lock_B.release()
         lock_C.release()
         lock_A.release()
-        time.sleep(0.1)
+        time.sleep(0.6)
         if should_stop.value == 1:
             break
     print('\nthread '+ str(num) + ' stopped')

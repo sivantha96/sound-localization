@@ -65,7 +65,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
-            time.sleep(0.6)
+            time.sleep(0.1)
         lock_B.release()
         lock_A.release()
         lock_C.release()
@@ -102,7 +102,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
-            time.sleep(0.6)
+            time.sleep(0.1)
         lock_C.release()
         lock_A.release()
         lock_B.release()
@@ -139,7 +139,7 @@ def localize(num, should_stop, listener, mic_A, mic_B, mic_C, lock_A, lock_B, lo
             mic_A.value = 0
             mic_B.value = 0
             mic_C.value = 0
-            time.sleep(0.6)
+            time.sleep(0.1)
         lock_C.release()
         lock_B.release()
         lock_A.release()
